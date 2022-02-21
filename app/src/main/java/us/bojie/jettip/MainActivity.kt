@@ -1,6 +1,7 @@
 package us.bojie.jettip
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             JetTipTheme {
-                TopHeader()
+                MainContent()
             }
         }
     }
@@ -72,26 +73,38 @@ fun TopHeader(totalPerPerson: Double = 0.0) {
 @Preview
 @Composable
 fun MainContent() {
+    BillForm {
+        Log.d("Cool", it)
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun BillForm(
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit,
+) {
     val (total, setTotal) = remember { mutableStateOf("") }
     val valid = derivedStateOf { total.trim().isNotEmpty() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .padding(2.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         border = BorderStroke(width = 1.dp, color = Color.LightGray)
 
     ) {
-        Column() {
+        Column {
             InputField(
                 value = total,
                 onValueChange = setTotal,
                 labelId = "Enter Bill",
                 isSingleLine = true,
-                onAction = KeyboardActions{
+                onAction = KeyboardActions {
                     if (!valid.value) return@KeyboardActions
+                    onValueChange(total.trim())
                     keyboardController?.hide()
                 }
             )
