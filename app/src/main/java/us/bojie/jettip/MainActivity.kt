@@ -96,7 +96,7 @@ fun BillForm(
         border = BorderStroke(width = 1.dp, color = Color.LightGray)
 
     ) {
-        Column {
+        Column(modifier.padding(6.dp)) {
             InputField(
                 value = total,
                 onValueChange = setTotal,
@@ -108,6 +108,20 @@ fun BillForm(
                     keyboardController?.hide()
                 }
             )
+
+            if (valid.value) {
+                Row(
+                    modifier = modifier.padding(3.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text("Split",
+                    modifier = modifier.align(
+                        alignment = Alignment.CenterVertically
+                    ))
+                }
+            } else {
+                Box() {}
+            }
         }
     }
 }
